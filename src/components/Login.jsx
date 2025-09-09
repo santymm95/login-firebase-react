@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react"; // Iconos
-import logo from "../assets/Login.gif"; // tu logo de ACEMA
+import logo from "../assets/logo.png"; // Logo de ACEMA
+import "../App.css"; // Importamos los estilos
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -25,8 +26,12 @@ function Login() {
 
   return (
     <div className="login-background">
+      {/* 👇 Capas del fondo */}
+      <div className="bg-3"></div>
+      <div className="login-overlay"></div>
+
+      {/* Tarjeta */}
       <div className="login-card">
-        {/* Header azul */}
         <div className="login-header">
           <img src={logo} alt="ACEMA" className="login-logo" />
           <h2>Bienvenido a ACEMA</h2>
