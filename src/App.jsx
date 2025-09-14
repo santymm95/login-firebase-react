@@ -1,31 +1,44 @@
-import "./App.css";
-import { useState } from "react";
+import "./App.css"
+import { useState, useEffect } from "react"
 
-// importando los módulos de firebase
-import appFirebase from "./credenciales.js";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// Firebase
+import appFirebase from "./credenciales.js"
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 
-const auth = getAuth(appFirebase);
-//importar nuestros componentes
-import Login from "./components/Login.jsx";
-import Home from "./components/Home.jsx";
+// Componentes
+import Login from "./components/Login.jsx"
+import Home from "./components/Home.jsx"
+import LoadingScreen from "./components/LoadingScreen.jsx"
+
+const auth = getAuth(appFirebase)
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in
-      setUser(user);
-    } else {
-      // User is signed out
-      setUser(null);
-    }
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
+      if (usuarioFirebase) {
+        // Usuario autenticado
+        setLoading(true)
+        setTimeout(() => {
+          setUser(usuarioFirebase)
+          setLoading(false)
+        }, 2000) // mantiene 2s la animación
+      } else {
+        setUser(null)
+        setLoading(false)
+      }
+    })
 
-  return (
-    <div>{user ? <Home user={user} correo={user.email} /> : <Login />}</div>
-  );
+    return () => unsubscribe()
+  }, [])
+
+  if (loading) {
+    return <LoadingScreen />
+  }
+
+  return <div>{user ? <Home user={user} correo={user.email} /> : <Login />}</div>
 }
 
-export default App;
+export default App

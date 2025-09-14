@@ -1,0 +1,404 @@
+/* Definición de variables CSS */
+:root {
+  /* Colores */
+  --color-dark-panel: white;
+  --color-light-panel: #215ba0;
+  --color-accent: #215ba0;
+  --color-accent-hover: #52a0e0;
+  --color-text-primary: #fff;
+  --color-text-secondary: #a0a0a0;
+  --color-text-heading: #CCD6F6;
+  --color-white: #fff;
+  --color-white-hover: #52a0e0;
+  --color-disabled: #e0e0e0;
+  --color-disabled-text: #a0a0a0;
+  --color-link-hover: #215ba0;
+
+  /* Fuentes */
+  --font-family-primary: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-base: 1em;
+  --font-size-heading: 3.5em;
+  --font-size-subheading: 2em;
+  --font-size-p: 1.1em;
+  --font-size-description: 0.9em;
+  --font-size-link: 0.85em;
+
+  /* Espaciado */
+  --padding-section: 40px 60px;
+  --padding-input-vertical: 10px;
+  --padding-input-left: 40px;
+  --padding-input-right: 40px;
+  --gap-links: 30px;
+  --gap-actions: 15px;
+
+  /* Transiciones */
+  --transition-fast: 0.3s ease;
+}
+
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Contenedor principal de 2 columnas */
+.login-container-split {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  color: var(--color-text-primary);
+}
+
+/* Panel Izquierdo */
+.login-left-panel {
+  flex: 1;
+  background-color: var(--color-dark-panel);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--padding-section);
+  box-sizing: border-box;
+}
+
+.company-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-secondary);
+}
+
+.fingerprint-icon {
+  color: var(--color-accent);
+}
+
+.company-name {
+  font-size: var(--font-size-p);
+  font-weight: 500;
+}
+
+.welcome-content {
+  text-align: left;
+  max-width: 400px;
+  margin-left: 20px;
+}
+
+.welcome-content h1 {
+  font-size: var(--font-size-heading);
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--color-text-heading);
+}
+
+.welcome-content p {
+  font-size: var(--font-size-p);
+  margin-bottom: 20px;
+  color: var(--color-text-secondary);
+}
+
+.description-text {
+  font-size: var(--font-size-description);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin-bottom: 30px;
+}
+
+.register-button {
+  background-color: var(--color-accent);
+  color: var(--color-dark-panel);
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  letter-spacing: 0.5px;
+}
+
+.register-button:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.footer-links {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--gap-links);
+  padding-left: 20px;
+}
+
+.footer-links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-link);
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--color-accent);
+}
+
+/* Panel Derecho */
+.login-right-panel {
+  flex: 1;
+  background-color: var(--color-light-panel);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.login-right-panel h2 {
+  font-size: var(--font-size-subheading);
+  font-weight: 500;
+  margin-bottom: 40px;
+  color: var(--color-white);
+  text-align: center;
+}
+
+.login-form-right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+}
+
+/* Grupo de etiquetas flotantes e iconos */
+.floating-label-group {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  width: 20px;
+  height: 20px;
+}
+
+.floating-input {
+  width: 100%;
+  padding: var(--padding-input-vertical) 0 var(--padding-input-vertical) var(--padding-input-left);
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+  color: var(--color-white);
+  font-size: var(--font-size-p);
+  outline: none;
+  transition: border-bottom-color var(--transition-fast);
+}
+
+.floating-input::placeholder {
+  color: transparent;
+}
+
+.floating-input:focus {
+  background-color: transparent;
+  border-bottom-color: var(--color-white);
+}
+
+.floating-label {
+  position: absolute;
+  top: 10px;
+  left: var(--padding-input-left);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--font-size-p);
+  pointer-events: none;
+  transition: var(--transition-fast);
+}
+
+/* Animación de la etiqueta flotante */
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label {
+  top: -15px;
+  font-size: var(--font-size-link);
+  color: var(--color-white);
+  left: var(--padding-input-left);
+}
+
+.floating-label-group:focus-within .input-icon {
+  color: var(--color-white);
+}
+
+/* Estilos para el campo de contraseña */
+.password-input {
+  padding-right: var(--padding-input-right);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color var(--transition-fast);
+  z-index: 10;
+}
+
+.password-toggle:hover {
+  color: var(--color-white);
+}
+
+.toggle-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  gap: var(--gap-actions);
+}
+
+.login-button {
+  background-color: var(--color-white);
+  color: var(--color-light-panel);
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 45px;
+}
+
+.login-button:hover {
+  background-color: var(--color-white-hover);
+}
+
+.login-button:disabled {
+  background-color: var(--color-disabled);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.forgot-password {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: var(--font-size-description);
+  transition: color var(--transition-fast);
+}
+
+.forgot-password:hover {
+  color: var(--color-white);
+}
+
+/* Animación de puntos de carga */
+.loader-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loader-dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  background-color: var(--color-light-panel);
+  border-radius: 50%;
+  animation: dot-blink 1.4s infinite ease-in-out both;
+}
+
+.loader-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loader-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loader-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes dot-blink {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Media Query para dispositivos móviles y tabletas */
+@media (max-width: 768px) {
+  .login-container-split {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .login-left-panel, .login-right-panel {
+    padding: 30px 20px;
+    flex: none;
+    width: 100%;
+  }
+
+  .welcome-content {
+    margin: 0 auto;
+    text-align: center;
+    max-width: 90%;
+  }
+
+  .welcome-content h1 {
+    font-size: 2.5em;
+  }
+
+  .footer-links {
+    justify-content: center;
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .login-right-panel h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  .login-form-right {
+    max-width: 90%;
+  }
+
+  .floating-label-group {
+    margin-bottom: 25px;
+  }
+
+  .input-icon {
+    left: 0;
+  }
+
+  .floating-input {
+    padding-left: 30px;
+  }
+
+  .floating-label {
+    left: 30px;
+  }
+
+  .floating-input:focus + .floating-label,
+  .floating-input:not(:placeholder-shown) + .floating-label {
+    top: -15px;
+    font-size: 0.85em;
+    left: 30px;
+  }
+
+  .login-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
