@@ -317,198 +317,206 @@ body {
   animation-delay: 0s;
   background: linear-gradient(45deg, #45b7d1, #ffffff);
 }
-
-/* ===== SWEETALERT2 CUSTOM STYLES ===== */
-
-/* Popup principal */
+/* Estilos generales para el popup de SweetAlert2 */
 .my-swal-popup {
-  background: var(--color-bg-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
-  border: 1px solid var(--color-border);
-  padding: var(--space-6);
-  max-width: 420px;
-  width: 90%;
-  font-family: var(--font-family-primary);
+ 
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border: none;
+  backdrop-filter: blur(10px);
 }
 
-/* Título */
+/* Título del popup */
 .my-swal-title {
-  font-size: var(--font-size-2xl) !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 1.5rem !important;
   font-weight: 700 !important;
-  color: var(--color-text-primary) !important;
-  text-align: center !important;
-  margin-bottom: var(--space-4) !important;
-  line-height: 1.3 !important;
+  color: #2d3748 !important;
+  text-align: center;
+  margin-bottom: 1rem !important;
+  background: linear-gradient(135deg, #2d3748, #4a5568);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Contenido HTML */
+/* Contenedor del contenido */
 .my-swal-popup .swal2-html-container {
-  font-size: var(--font-size-base) !important;
-  color: var(--color-text-secondary) !important;
-  line-height: 1.5 !important;
-  margin: var(--space-4) 0 !important;
-  text-align: center !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  color: #4a5568;
+  margin: 1rem 0;
+  line-height: 1.5;
 }
 
-/* Input personalizado */
+/* Campo de entrada de email */
 .my-swal-input {
-  width: 100% !important;
-  padding: var(--space-3) var(--space-4) !important;
-  border: 2px solid var(--color-border) !important;
-  border-radius: var(--radius-md) !important;
-  font-size: var(--font-size-base) !important;
-  font-family: var(--font-family-primary) !important;
-  background: var(--color-bg-primary) !important;
-  color: var(--color-text-primary) !important;
-  transition: all var(--transition-base) !important;
-  margin-top: var(--space-3) !important;
+  width: 90%;
+  margin: auto;
+  padding: 12px 40px 12px 35px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+ 
 }
+
+
+
 
 .my-swal-input:focus {
-  outline: none !important;
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 3px rgba(33, 91, 160, 0.1) !important;
+  border-color: #215ba0;
 }
 
 .my-swal-input::placeholder {
-  color: var(--color-text-light) !important;
-  font-size: var(--font-size-sm) !important;
+  color: #999;
 }
 
-/* Botón de confirmar */
+/* Botón de confirmación (Enviar) */
 .my-swal-confirm {
-  background: var(--color-primary) !important;
-  color: var(--color-white) !important;
+  background: #215ba0;
   border: none !important;
-  border-radius: var(--radius-md) !important;
-  padding: var(--space-3) var(--space-6) !important;
-  font-size: var(--font-size-base) !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 2rem !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   font-weight: 600 !important;
-  font-family: var(--font-family-primary) !important;
-  transition: all var(--transition-base) !important;
-  margin: 0 !important;
+  font-size: 1rem !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+  margin: 0.5rem !important;
 }
 
 .my-swal-confirm:hover {
-  background: var(--color-primary-hover) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: var(--shadow-md) !important;
+   
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+  background: #2b76d1;
 }
 
 .my-swal-confirm:active {
   transform: translateY(0) !important;
 }
 
-.my-swal-confirm:focus {
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(33, 91, 160, 0.3) !important;
-}
-
 /* Botón de cancelar */
 .my-swal-cancel {
-  background: var(--color-gray-200) !important;
-  color: var(--color-gray-700) !important;
-  border: none !important;
-  border-radius: var(--radius-md) !important;
-  padding: var(--space-3) var(--space-6) !important;
-  font-size: var(--font-size-base) !important;
-  font-weight: 500 !important;
-  font-family: var(--font-family-primary) !important;
-  transition: all var(--transition-base) !important;
-  margin: 0 !important;
+  background: #f7fafc !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 0.75rem 2rem !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #4a5568 !important;
+  transition: all 0.3s ease !important;
+  margin: 0.5rem !important;
 }
 
 .my-swal-cancel:hover {
-  background: var(--color-gray-300) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: var(--shadow-sm) !important;
+  background: #eaf1f8 !important;
+  border-color: #cbd5e0 !important;
+ 
+ 
 }
 
-.my-swal-cancel:active {
-  transform: translateY(0) !important;
+/* Mensajes de éxito */
+.swal2-success .swal2-title {
+  color: #2d3748 !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
 }
 
-.my-swal-cancel:focus {
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.3) !important;
+.swal2-success .swal2-html-container {
+  color: #4a5568;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
 }
 
-/* Contenedor de acciones */
-.my-swal-popup .swal2-actions {
-  margin-top: var(--space-6) !important;
-  gap: var(--space-3) !important;
+/* Mensajes de error */
+.swal2-error .swal2-title {
+  color: #e53e3e !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
 }
 
-/* Mensaje de validación */
-.my-swal-popup .swal2-validation-message {
-  background: rgba(239, 68, 68, 0.1) !important;
-  color: var(--color-error) !important;
-  border: 1px solid rgba(239, 68, 68, 0.2) !important;
-  border-radius: var(--radius-md) !important;
-  font-size: var(--font-size-sm) !important;
-  font-weight: 500 !important;
-  margin-top: var(--space-3) !important;
-  padding: var(--space-2) var(--space-3) !important;
+.swal2-error .swal2-html-container {
+  color: #718096;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
 }
 
-/* Iconos de éxito/error */
-.my-swal-popup .swal2-success {
-  border-color: var(--color-success) !important;
-  color: var(--color-success) !important;
+/* Iconos personalizados */
+.swal2-icon {
+  border: none !important;
+  margin: 1rem auto !important;
 }
 
-.my-swal-popup .swal2-error {
-  border-color: var(--color-error) !important;
-  color: var(--color-error) !important;
+.swal2-success [class^='swal2-success-line'] {
+  background-color: #48bb78 !important;
 }
 
-/* Modal de éxito/error posterior */
-.my-swal-popup.swal2-success {
-  border-left: 4px solid var(--color-success) !important;
+.swal2-error [class^='swal2-x-mark-line'] {
+  background-color: #e53e3e !important;
 }
 
-.my-swal-popup.swal2-error {
-  border-left: 4px solid var(--color-error) !important;
+/* Animaciones suaves */
+.my-swal-popup {
+  animation: slideInUp 0.3s ease-out;
 }
 
-/* ===== SWEETALERT2 DARK MODE SUPPORT ===== */
-@media (prefers-color-scheme: dark) {
-  .my-swal-popup {
-    background: var(--color-gray-800) !important;
-    border-color: var(--color-gray-700) !important;
-  }
-  
-  .my-swal-input {
-    background: var(--color-gray-800) !important;
-    border-color: var(--color-gray-600) !important;
-    color: var(--color-gray-100) !important;
-  }
-  
-  .my-swal-cancel {
-    background: var(--color-gray-700) !important;
-    color: var(--color-gray-200) !important;
-  }
-  
-  .my-swal-cancel:hover {
-    background: var(--color-gray-600) !important;
-  }
-}
-
-/* ===== ANIMACIONES PERSONALIZADAS ===== */
-.my-swal-popup.swal2-show {
-  animation: swalSlideIn 0.3s ease-out !important;
-}
-
-@keyframes swalSlideIn {
+@keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(-20px) scale(0.95);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .my-swal-popup {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .my-swal-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .my-swal-input {
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .my-swal-confirm,
+  .my-swal-cancel {
+    padding: 0.625rem 1.5rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Efectos de foco mejorados */
+.my-swal-confirm:focus,
+.my-swal-cancel:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Estados de validación */
+.swal2-validation-message {
+  background: #fed7d7 !important;
+  color: #c53030 !important;
+  border: 1px solid #feb2b2 !important;
+  border-radius: 8px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  padding: 0.75rem;
 }
 
 /* ===== RESPONSIVE ADJUSTMENTS ===== */

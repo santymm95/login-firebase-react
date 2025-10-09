@@ -88,49 +88,67 @@ function Login() {
   };
 
   const handlePasswordReset = async () => {
-    const { value: emailToReset } = await MySwal.fire({
-      title: "<strong>Restablecer contraseña</strong>",
-      html: `
-      <p>Ingresa tu correo para enviar el enlace de recuperación:</p>
-      <input type="email" id="swal-input" class="swal2-input" placeholder="correo@acemaingenieria.com">`,
-      showCancelButton: true,
-      confirmButtonText: "Enviar",
-      cancelButtonText: "Cancelar",
-      focusConfirm: false,
+  const { value: emailToReset } = await MySwal.fire({
+    title: "<strong>🔐 Restablecer contraseña</strong>",
+    html: `
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <p style="margin: 0; color: #4a5568;">Ingresa tu correo para enviar el enlace de recuperación:</p>
+    </div>
+    <input type="email" id="swal-input" class="swal2-input my-swal-input" placeholder="correo@acemaingenieria.com" autocomplete="email">`,
+    showCancelButton: true,
+    confirmButtonText: "Enviar",
+    cancelButtonText: "Cancelar",
+    focusConfirm: false,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    customClass: {
+      popup: "my-swal-popup",
+      title: "my-swal-title",
+      confirmButton: "my-swal-confirm",
+      cancelButton: "my-swal-cancel",
+      input: "my-swal-input",
+    },
+    preConfirm: () => {
+      const email = document.getElementById("swal-input").value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!email) {
+        Swal.showValidationMessage("¡Debes escribir un correo electrónico!");
+      } else if (!emailRegex.test(email)) {
+        Swal.showValidationMessage("¡Por favor ingresa un correo electrónico válido!");
+      }
+      return email;
+    },
+  });
+
+  if (!emailToReset) return;
+
+  try {
+    await sendPasswordResetEmail(auth, emailToReset);
+    await MySwal.fire({
+      icon: "success",
+      title: "¡Correo enviado!",
+      text: "Se ha enviado un correo para restablecer la contraseña. Revisa tu bandeja de entrada o spam.",
       customClass: {
         popup: "my-swal-popup",
         title: "my-swal-title",
         confirmButton: "my-swal-confirm",
-        cancelButton: "my-swal-cancel",
-        input: "my-swal-input",
-      },
-      preConfirm: () => {
-        const email = document.getElementById("swal-input").value;
-        if (!email) {
-          Swal.showValidationMessage("¡Debes escribir un correo!");
-        }
-        return email;
-      },
+      }
     });
-
-    if (!emailToReset) return;
-
-    try {
-      await sendPasswordResetEmail(auth, emailToReset);
-      await MySwal.fire({
-        icon: "success",
-        title: "¡Correo enviado!",
-        text: "Se ha enviado un correo para restablecer la contraseña.",
-      });
-    } catch (error) {
-      console.error(error);
-      await MySwal.fire({
-        icon: "error",
-        title: "Error",
-        text: `No se pudo enviar el correo: ${error.message}`,
-      });
-    }
-  };
+  } catch (error) {
+    console.error(error);
+    await MySwal.fire({
+      icon: "error",
+      title: "Error",
+      text: `No se pudo enviar el correo: ${error.message}`,
+      customClass: {
+        popup: "my-swal-popup",
+        title: "my-swal-title",
+        confirmButton: "my-swal-confirm",
+      }
+    });
+  }
+};
 
   return (
     <div className="login-container-split">
