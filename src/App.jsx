@@ -1,44 +1,24 @@
-import "./App.css"
-import { useState, useEffect } from "react"
+  import { Routes, Route, Navigate } from "react-router-dom";
+  import Login from "./components/Login";
+  import Registro from "./components/Registro";
+  import Home from "./components/Home";
+  import Register from "./pages/Register";
+  import LoadingScreen from "./components/LoadingScreen";
 
-// Firebase
-import appFirebase from "./credenciales.js"
-import { getAuth, onAuthStateChanged } from "firebase/auth"
+  function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route path="/LoadingScreen" element={<LoadingScreen />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<h1>404 Not Found</h1>} />
 
-// Componentes
-import Login from "./components/Login.jsx"
-import Home from "./components/Home.jsx"
-import LoadingScreen from "./components/LoadingScreen.jsx"
-
-const auth = getAuth(appFirebase)
-
-function App() {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
-      if (usuarioFirebase) {
-        // Usuario autenticado
-        setLoading(true)
-        setTimeout(() => {
-          setUser(usuarioFirebase)
-          setLoading(false)
-        }, 2000) // mantiene 2s la animación
-      } else {
-        setUser(null)
-        setLoading(false)
-      }
-    })
-
-    return () => unsubscribe()
-  }, [])
-
-  if (loading) {
-    return <LoadingScreen />
-  }
-
-  return <div>{user ? <Home user={user} correo={user.email} /> : <Login />}</div>
+    </Routes>
+  );
 }
 
-export default App
+  export default App;
+  

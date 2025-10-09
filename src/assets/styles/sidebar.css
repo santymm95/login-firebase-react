@@ -1,0 +1,152 @@
+/* Estilos generales del sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 1.5rem 1rem;
+  transition: width 0.3s ease-in-out;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 40; /* Asegura que el sidebar esté detrás de la barra de navegación */
+}
+
+/* Estado colapsado (por defecto) */
+.sidebar.collapsed {
+  width: 5rem; /* Ancho para mostrar solo los iconos */
+}
+
+/* Estado expandido */
+.sidebar.expanded {
+  width: 15rem; /* Ancho completo */
+}
+
+/* Header y título */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-header .logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #3498db;
+  border-radius: 50%;
+}
+
+.sidebar-header .title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  animation-delay: 0.2s;
+}
+
+/* Menú de navegación */
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  margin-bottom: 1rem;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #ecf0f1;
+  text-decoration: none;
+  padding: 0.75rem 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.menu-link:hover {
+  background-color: #34495e;
+  transform: translateX(5px);
+}
+
+.menu-link .icon {
+  flex-shrink: 0;
+}
+
+.menu-link .text {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+  animation-delay: 0.2s;
+}
+
+/* Animación para el texto al expandirse */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Estilo para el pie de página */
+.sidebar-footer .menu-link {
+  color: #e74c3c;
+}
+
+.sidebar-footer .menu-link:hover {
+  background-color: #c0392b;
+  transform: translateX(5px);
+}
+
+/*====================
+  Responsivo para móviles
+====================*/
+@media (max-width: 768px) {
+  .sidebar {
+    width: 4rem; /* Ancho más pequeño para móviles */
+    padding: 1rem 0.5rem;
+    left: 0;
+    top: 4rem; /* Ajuste para dejar espacio a la barra de navegación superior */
+    height: calc(100vh - 4rem); /* Altura restante */
+  }
+
+  .sidebar.expanded {
+    width: 4rem; /* Evita que el sidebar se expanda en móviles */
+    /* Para habilitar una superposición, podrías cambiar left: -100% y al expandir, left: 0 */
+  }
+
+  .sidebar-header {
+    margin-bottom: 1rem;
+  }
+  
+  /* Oculta los títulos y textos para dejar solo los iconos */
+  .sidebar-header .title,
+  .menu-link .text {
+    display: none;
+  }
+  
+  /* Centra los iconos */
+  .menu-link {
+    justify-content: center;
+    gap: 0;
+  }
+  
+  /* Oculta el logo en móviles */
+  .sidebar-header .logo {
+    display: none;
+  }
+}

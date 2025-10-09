@@ -1,130 +1,176 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+// importa solo una imagen de fondo
+import fondo1 from "../assets/fondo2.webp";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
-import logo from "../assets/logo.png";
-import "../assets/styles/login.css";
-import appFirebase from "../credenciales";
+import { useNavigate } from "react-router-dom";
 import {
   getAuth,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import logo from "../assets/logo.png";
+import "../assets/styles/login.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
+import appFirebase from "../Credenciales";
 
 const auth = getAuth(appFirebase);
 
 function Login() {
+  // Estados para el formulario
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showRecaptcha, setShowRecaptcha] = useState(false); // ✅ Mostrar reCAPTCHA después del clic
-  const [recaptchaCompleted, setRecaptchaCompleted] = useState(false); // ✅ Habilitar botón
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  const [showRecaptcha, setShowRecaptcha] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Primer clic: mostrar reCAPTCHA
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+  // Mostrar reCAPTCHA solo al hacer clic en el botón
   const handleLoginClick = (e) => {
     e.preventDefault();
     setShowRecaptcha(true);
   };
 
-  // Login real, solo se habilita después de completar reCAPTCHA
   const handleActualLogin = async (e) => {
     e.preventDefault();
+
+    if (!recaptchaToken) {
+      alert("Por favor, completa el reCAPTCHA");
+      return;
+    }
+
     setLoading(true);
-    const { email, password } = formData;
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log("✅ Sesión iniciada:", email);
-      setTimeout(() => setLoading(false), 1500);
+      // Validación con backend
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, recaptchaToken }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        alert(`❌ ${data.message}`);
+        return;
+      }
+
+      // Iniciar sesión en Firebase Web SDK
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+
+      // Login exitoso → ir directo al home
+      // Login exitoso → primero LoadingScreen
+      navigate("/LoadingScreen");
+
+      // Después de 3 segundos, ir a Home
+      setTimeout(() => {
+        navigate("/home");
+      }, 3000); // 3000 ms = 3 segundos
     } catch (error) {
-      console.error("❌ Error en el inicio de sesión:", error.message);
-      alert("Error al iniciar sesión: " + error.message);
+      console.error(error);
+      alert("❌ Error al conectar con el servidor o Firebase");
+    } finally {
       setLoading(false);
     }
   };
 
   const handlePasswordReset = async () => {
-    const emailToReset = prompt("Por favor, introduce tu correo electrónico:");
-    if (emailToReset) {
-      try {
-        await sendPasswordResetEmail(auth, emailToReset);
-        alert(
-          "Se ha enviado un correo electrónico para restablecer tu contraseña."
-        );
-        console.log("✅ Correo de restablecimiento enviado a:", emailToReset);
-      } catch (error) {
-        console.error(
-          "❌ Error al enviar el correo de restablecimiento:",
-          error.message
-        );
-        alert("Error al enviar el correo: " + error.message);
-      }
-    } else {
-      alert("Por favor, introduce un correo electrónico válido.");
+    const { value: emailToReset } = await MySwal.fire({
+      title: "<strong>Restablecer contraseña</strong>",
+      html: `
+      <p>Ingresa tu correo para enviar el enlace de recuperación:</p>
+      <input type="email" id="swal-input" class="swal2-input" placeholder="correo@acemaingenieria.com">`,
+      showCancelButton: true,
+      confirmButtonText: "Enviar",
+      cancelButtonText: "Cancelar",
+      focusConfirm: false,
+      customClass: {
+        popup: "my-swal-popup",
+        title: "my-swal-title",
+        confirmButton: "my-swal-confirm",
+        cancelButton: "my-swal-cancel",
+        input: "my-swal-input",
+      },
+      preConfirm: () => {
+        const email = document.getElementById("swal-input").value;
+        if (!email) {
+          Swal.showValidationMessage("¡Debes escribir un correo!");
+        }
+        return email;
+      },
+    });
+
+    if (!emailToReset) return;
+
+    try {
+      await sendPasswordResetEmail(auth, emailToReset);
+      await MySwal.fire({
+        icon: "success",
+        title: "¡Correo enviado!",
+        text: "Se ha enviado un correo para restablecer la contraseña.",
+      });
+    } catch (error) {
+      console.error(error);
+      await MySwal.fire({
+        icon: "error",
+        title: "Error",
+        text: `No se pudo enviar el correo: ${error.message}`,
+      });
     }
-  };
-
-  const handleRegisterClick = () => {
-    alert("Redirigir a la página de registro o abrir un modal.");
-  };
-
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
-  const handleRecaptchaChange = (token) => {
-    if (token) setRecaptchaCompleted(true);
   };
 
   return (
     <div className="login-container-split">
-      {/* Columna izquierda */}
-      <div className="login-left-panel">
-        <div className="company-logo-section">
-          <img src={logo} alt="Logo de la Compañía" className="company-logo" />
-        </div>
+      <div
+        className="login-left-panel"
+        style={{ backgroundImage: `url(${fondo1})` }}
+      >
         <div className="welcome-content">
           <h1>Bienvenido</h1>
-          <p>Regístrate para una cuenta ERP aquí</p>
-          <p className="description-text">
-            Regístrate para una cuenta ERP gratuita aquí y obtén acceso a la
-            tienda web, la academia y el portal de membresía myERP.
+          <p>
+            <strong>ACEMA Ingeniería</strong> es una empresa de Medellín
+            especializada en proyectos eléctricos y energías renovables, con
+            experiencia en granjas solares y sistemas de baja, media y alta
+            tensión.
           </p>
-          <button className="register-button" onClick={handleRegisterClick}>
-            REGÍSTRATE AQUÍ
-          </button>
-        </div>
-        <div className="footer-links">
-          <span>
-            <a href="#">ELEGIR IDIOMA</a>
-          </span>
-          <span>
-            <a href="#">CENTRO DE AYUDA</a>
-          </span>
-          <span>
-            <a href="#">SITIO WEB ERP</a>
-          </span>
-          <span>
-            <a href="#">PRECIOS</a>
-          </span>
+          <p>
+            Conoce más en:{" "}
+            <a
+              href="https://www.acemaingenieria.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              www.acemaingenieria.com
+            </a>
+          </p>
+         
         </div>
       </div>
 
-      {/* Columna derecha */}
       <div className="login-right-panel">
-        <h2>Inicia sesión</h2>
-        <form className="login-form-right">
-          {/* Email */}
+        <form className="login-form-right" onSubmit={handleActualLogin}>
+          <div className="logo-container">
+            <img src={logo} alt="Logo" className="logo-image" />
+          </div>
+
+        
           <div className="floating-label-group">
             <Mail className="input-icon" />
             <input
               type="email"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -132,27 +178,21 @@ function Login() {
               className="floating-input"
               placeholder=" "
             />
-            <label htmlFor="email" className="floating-label">
-              Tu Correo Electrónico
-            </label>
+            <label className="floating-label">Correo Electrónico</label>
           </div>
 
-          {/* Contraseña */}
           <div className="floating-label-group">
             <Lock className="input-icon" />
             <input
               type={showPassword ? "text" : "password"}
-              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
-              className="floating-input password-input"
+              className="floating-input"
               placeholder=" "
             />
-            <label htmlFor="password" className="floating-label">
-              Contraseña
-            </label>
+            <label className="floating-label">Contraseña</label>
             <div className="password-toggle" onClick={togglePasswordVisibility}>
               {showPassword ? (
                 <EyeOff className="toggle-icon" />
@@ -161,34 +201,28 @@ function Login() {
               )}
             </div>
           </div>
-
-          {/* Botón inicial para mostrar reCAPTCHA */}
+        
           {!showRecaptcha && (
             <button className="login-button" onClick={handleLoginClick}>
               INICIAR SESIÓN
             </button>
+            
           )}
-
-          {/* reCAPTCHA + botón final */}
+    <a href="#" className="forgot-password" onClick={handlePasswordReset}>
+            ¿Olvidaste tu contraseña?
+          </a>
           {showRecaptcha && (
             <div className="recaptcha-container">
               <ReCAPTCHA
-                sitekey="6Les98grAAAAAMIB2Sze_m-nEuxWkWNdzercrxLp"
-                onChange={handleRecaptchaChange}
+                sitekey="6Lc5fskrAAAAAMaSa3Ms-a31TKBo97dZnnhnQwm6"
+                onChange={(token) => setRecaptchaToken(token)}
               />
-              <button
-                className="login-button"
-                onClick={handleActualLogin}
-                disabled={!recaptchaCompleted || loading}
-              >
-                INICIAR SESIÓN
+              <button type="submit" className="login-button" disabled={loading}>
+                {loading ? "..." : "INICIAR SESIÓN"}
               </button>
+              
             </div>
           )}
-
-          <a href="#" className="forgot-password" onClick={handlePasswordReset}>
-            ¿Olvidaste tu contraseña?
-          </a>
         </form>
       </div>
     </div>

@@ -1,0 +1,248 @@
+/*====================
+  Variables de Color
+====================*/
+:root {
+  --primary-color: #3b82f6; /* Azul brillante */
+  --primary-hover-color: #2563eb; /* Azul oscuro para hover */
+  --secondary-color: #1f2937; /* Gris oscuro para texto */
+  --bg-light: #ffffff; /* Blanco para fondo */
+  --bg-gray: #f9fafb; /* Gris claro para fondo */
+  --text-color-light: #e5e7eb; /* Gris claro para texto */
+  --danger-color: #ef4444; /* Rojo para cerrar sesión */
+  --danger-hover-color: #dc2626; /* Rojo oscuro para hover */
+}
+
+/*====================
+  Estilos generales de la navegación
+====================*/
+.nav-login {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--bg-light);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo {
+  height: 2.5rem;
+  width: auto;
+}
+
+.nav-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  letter-spacing: -0.025em;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/*====================
+  Estilos de los botones
+====================*/
+.nav-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-btn svg {
+  margin-right: 0.5rem;
+}
+
+.nav-btn.login {
+  background-color: var(--bg-gray);
+  color: var(--primary-color);
+  border: 1px solid var(--bg-gray);
+}
+
+.nav-btn.login:hover {
+  background-color: #e5e7eb;
+  color: var(--primary-hover-color);
+}
+
+.nav-btn.register {
+  background-color: var(--primary-color);
+  color: var(--bg-light);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.nav-btn.register:hover {
+  background-color: var(--primary-hover-color);
+  transform: translateY(-1px);
+}
+
+.nav-btn.logout {
+  background-color: var(--danger-color);
+  color: var(--bg-light);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.nav-btn.logout:hover:not(:disabled) {
+  background-color: var(--danger-hover-color);
+  transform: translateY(-1px);
+}
+
+.nav-btn.logout:disabled {
+  background-color: var(--danger-color);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/*====================
+  Estilos del usuario
+====================*/
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.user-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.user-info:hover .user-icon {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+.nav-user {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--secondary-color);
+  transition: color 0.3s ease;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*====================
+  Estilos del loader
+====================*/
+.loader-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.loader-dots span {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--bg-light);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loader-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loader-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/*====================
+  Responsivo
+====================*/
+@media (max-width: 768px) {
+  /* Se aplica en dispositivos móviles y tabletas */
+  .nav-login {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-logo {
+    height: 2rem; /* Reduce el tamaño del logo */
+  }
+
+  .nav-title {
+    font-size: 1.2rem; /* Reduce el tamaño del título */
+  }
+  
+  /* Oculta los botones de 'Iniciar sesión' y 'Registrarse' cuando hay poco espacio */
+  .nav-right .nav-btn.login,
+  .nav-right .nav-btn.register {
+    display: none;
+  }
+
+  /* Muestra solo el icono en el botón de cerrar sesión para ahorrar espacio */
+  .nav-right .nav-btn.logout span {
+    display: none;
+  }
+
+  /* Asegura que el botón de cerrar sesión siga siendo legible */
+  .nav-right .nav-btn.logout svg {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Estilos específicos para teléfonos móviles */
+  .nav-left {
+    gap: 0.25rem;
+  }
+  
+  .nav-title {
+    display: none; /* Oculta el título para dejar más espacio al logo */
+  }
+  
+  /* Oculta el nombre de usuario y muestra solo el icono */
+  .nav-user {
+    display: none;
+  }
+
+  .user-info {
+    gap: 0.5rem;
+  }
+  
+  .user-icon {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.9rem;
+  }
+}

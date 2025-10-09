@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-import appFirebase from "../credenciales";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import appFirebase from "../Credenciales";
 import logo from "../assets/logo.png";
-import { LogOut, LogIn, UserPlus } from "lucide-react";
+import { LogOut } from "lucide-react";
+import "../assets/styles/navlogin.css";
 
 const auth = getAuth(appFirebase);
 
 function NavLogin() {
   const [usuario, setUsuario] = useState(null);
   const [loadingLogout, setLoadingLogout] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true); // ✅ estado de carga
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUsuario(user ? user : null);
+      setCheckingAuth(false); // ✅ autenticación lista
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -26,6 +26,7 @@ function NavLogin() {
     try {
       setLoadingLogout(true);
       await signOut(auth);
+      navigate("/login");
     } catch (error) {
       console.error("❌ Error al cerrar sesión:", error.message);
     } finally {
@@ -33,23 +34,37 @@ function NavLogin() {
     }
   };
 
-  // 📌 Obtener inicial del correo
   const getInicial = (email) => {
     if (!email) return "?";
     return email.charAt(0).toUpperCase();
   };
 
+  // Mientras Firebase verifica la sesión, mostramos un placeholder
+  if (checkingAuth) {
+    return (
+      <nav className="nav-login">
+        <div className="nav-left">
+          <img src={logo} alt="ACEMA" className="nav-logo" />
+        </div>
+        <div className="nav-right">
+          <div className="loader-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
   return (
     <nav className="nav-login">
-      {/* Logo */}
       <div className="nav-left">
         <img src={logo} alt="ACEMA" className="nav-logo" />
-        <h1 className="nav-title">ACEMA</h1>
       </div>
 
-      {/* Sección derecha */}
       <div className="nav-right">
-        {usuario ? (
+        {usuario && (
           <>
             <div className="user-info">
               <div className="user-icon">{getInicial(usuario.email)}</div>
@@ -72,15 +87,6 @@ function NavLogin() {
                 </>
               )}
             </button>
-          </>
-        ) : (
-          <>
-            <a href="/login" className="nav-btn login">
-              <LogIn size={18} /> Iniciar sesión
-            </a>
-            <a href="/register" className="nav-btn register">
-              <UserPlus size={18} /> Registrarse
-            </a>
           </>
         )}
       </div>

@@ -1,0 +1,49 @@
+/* Estilos generales del layout del dashboard */
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+}
+
+/* Contenedor del contenido principal (sidebar + main content) */
+.main-content-wrapper {
+  display: flex;
+  flex: 1; /* Permite que este contenedor ocupe el espacio restante */
+  margin-top: 4rem; /* Un margen superior para dejar espacio para la barra de navegación */
+}
+
+/* Estilos para el contenido principal del dashboard */
+.dashboard-content {
+  flex: 1; /* Permite que este contenedor crezca para llenar el espacio */
+  padding: 2rem;
+  padding-left: 6rem; /* Deja un espacio a la izquierda para el sidebar colapsado */
+  transition: padding-left 0.3s ease-in-out;
+}
+
+/* Ajusta el padding cuando el sidebar está expandido */
+.sidebar.expanded + .dashboard-content {
+  padding-left: 16rem; /* Más espacio a la izquierda para el sidebar expandido */
+}
+
+/* Estilos para las tarjetas o secciones del dashboard */
+.dashboard-card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem;
+}
+
+.dashboard-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding-left: 1rem;
+  }
+}
