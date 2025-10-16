@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // importa solo una imagen de fondo
-import fondo1 from "../assets/fondo2.webp";
+import fondo1 from "../assets/images/fondo2.webp";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,8 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import logo from "../assets/logo.png";
+import logo from "../assets/images/logo.png";
+
 import "../assets/styles/login.css";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -78,7 +79,7 @@ function Login() {
       // Después de 3 segundos, ir a Home
       setTimeout(() => {
         navigate("/home");
-      }, 3000); // 3000 ms = 3 segundos
+      }, 2000); // 3000 ms = 3 segundos
     } catch (error) {
       console.error(error);
       alert("❌ Error al conectar con el servidor o Firebase");
@@ -89,9 +90,12 @@ function Login() {
 
   const handlePasswordReset = async () => {
   const { value: emailToReset } = await MySwal.fire({
-    title: "<strong>🔐 Restablecer contraseña</strong>",
+    icon: "info",
+    iconColor: "#215ba0",     
+    title: "<strong>Restablecer contraseña</strong>",
     html: `
     <div style="text-align: center; margin-bottom: 1rem;">
+      
       <p style="margin: 0; color: #4a5568;">Ingresa tu correo para enviar el enlace de recuperación:</p>
     </div>
     <input type="email" id="swal-input" class="swal2-input my-swal-input" placeholder="correo@acemaingenieria.com" autocomplete="email">`,
@@ -135,7 +139,8 @@ function Login() {
         confirmButton: "my-swal-confirm",
       }
     });
-  } catch (error) {
+  } 
+  catch (error) {
     console.error(error);
     await MySwal.fire({
       icon: "error",

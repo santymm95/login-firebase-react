@@ -34,3 +34,6 @@ dist-ssr
 .env.local
 .env.*.local
 Credenciales.js
+
+# Variables de entorno
+.env

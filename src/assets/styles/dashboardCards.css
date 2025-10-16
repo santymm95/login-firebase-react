@@ -1,0 +1,377 @@
+/* dashboardcards.css */
+:root {
+  /* Colores modernos */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --secondary: #ec4899;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --dark: #1f2937;
+  --light: #f8fafc;
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-info: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  --gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  
+  /* Transiciones */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Card principal */
+.dashboard-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-100);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.dashboard-card:hover::before {
+  opacity: 1;
+}
+
+.dashboard-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  transition: all var(--transition-slow);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.dashboard-card:hover::after {
+  width: 150%;
+  height: 150%;
+}
+
+/* Icono */
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 2;
+  transition: all var(--transition-normal);
+  background: var(--gradient-primary);
+  color: var(--white);
+  box-shadow: var(--shadow-lg);
+}
+
+.dashboard-card:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Contenido */
+.card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.card-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+  transition: color var(--transition-normal);
+}
+
+.dashboard-card:hover .card-content h3 {
+  color: var(--primary-dark);
+}
+
+.card-value {
+  display: block;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0.5rem 0;
+  line-height: 1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all var(--transition-normal);
+}
+
+.dashboard-card:hover .card-value {
+  transform: scale(1.05);
+}
+
+.card-content p {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  margin: 0.75rem 0 0 0;
+  line-height: 1.5;
+  transition: color var(--transition-normal);
+}
+
+.dashboard-card:hover .card-content p {
+  color: var(--gray-600);
+}
+
+/* Estados de hover mejorados */
+.dashboard-card:hover {
+  box-shadow: var(--shadow-2xl);
+  border-color: var(--gray-200);
+  transform: translateY(-8px);
+}
+
+/* Variantes de color para diferentes tipos de cards */
+.dashboard-card.primary .card-icon {
+  background: var(--gradient-primary);
+}
+
+.dashboard-card.success .card-icon {
+  background: var(--gradient-success);
+}
+
+.dashboard-card.warning .card-icon {
+  background: var(--gradient-warning);
+}
+
+.dashboard-card.info .card-icon {
+  background: var(--gradient-info);
+}
+
+.dashboard-card.purple .card-icon {
+  background: var(--gradient-purple);
+}
+
+.dashboard-card.primary::before {
+  background: var(--gradient-primary);
+}
+
+.dashboard-card.success::before {
+  background: var(--gradient-success);
+}
+
+.dashboard-card.warning::before {
+  background: var(--gradient-warning);
+}
+
+.dashboard-card.info::before {
+  background: var(--gradient-info);
+}
+
+.dashboard-card.purple::before {
+  background: var(--gradient-purple);
+}
+
+.dashboard-card.primary .card-value {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dashboard-card.success .card-value {
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dashboard-card.warning .card-value {
+  background: var(--gradient-warning);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dashboard-card.info .card-value {
+  background: var(--gradient-info);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dashboard-card.purple .card-value {
+  background: var(--gradient-purple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Efectos de partículas (opcional) */
+.card-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.dashboard-card:hover .card-particles {
+  opacity: 1;
+}
+
+.particle {
+  position: absolute;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+  
+  .card-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1rem;
+  }
+  
+  .card-value {
+    font-size: 2rem;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-card {
+    padding: 1.25rem;
+  }
+  
+  .card-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .card-value {
+    font-size: 1.75rem;
+  }
+}
+
+/* Modo oscuro (opcional) */
+@media (prefers-color-scheme: dark) {
+  .dashboard-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border-color: #334155;
+    color: #e2e8f0;
+  }
+  
+  .card-content h3 {
+    color: #f1f5f9;
+  }
+  
+  .card-content p {
+    color: #94a3b8;
+  }
+  
+  .dashboard-card:hover .card-content p {
+    color: #cbd5e1;
+  }
+}
+
+/* Animaciones de entrada */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dashboard-card {
+  animation: cardEntrance 0.6s ease-out;
+}
+
+/* Efecto de brillo al hover */
+.dashboard-card {
+  position: relative;
+}
+
+.dashboard-card:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+}
+
+/* Loading state (opcional) */
+.dashboard-card.loading {
+  pointer-events: none;
+}
+
+.dashboard-card.loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}

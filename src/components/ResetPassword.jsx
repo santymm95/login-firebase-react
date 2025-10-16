@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom"; // Hook para obtener el oobCode y navegar
 import { getAuth, confirmPasswordReset } from "firebase/auth";
-import appFirebase from "../credenciales";
+import appFirebase from "../Credenciales";
+ 
 
 const auth = getAuth(appFirebase);
 

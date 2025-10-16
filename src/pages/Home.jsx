@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from './Dashboard'; // Importa el componente Dashboard
+import Dashboard from '../pages/Dashboard'; // Importa el componente Dashboard
 import '../assets/styles/login.css'; // Asegúrate de crear este archivo CSS para estilos específicos del dashboard
 
 function Home() {

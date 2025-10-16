@@ -7,6 +7,48 @@
   font-family: Arial, sans-serif;
 }
 
+.dashboard-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-content h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.card-content p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
 /* Contenedor del contenido principal (sidebar + main content) */
 .main-content-wrapper {
   display: flex;

@@ -1,19 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { Home, User, Settings, LogOut, FilePlus } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHome,
+  faUser,
+  faCog,
+  faSignOutAlt,
+  faShoppingCart,
+  faFileAlt,
+  faBox,
+  faMicrochip,
+} from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../Credenciales";
 import { doc, getDoc } from "firebase/firestore";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../assets/styles/sidebar.css";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState(location.pathname);
+  const navigate = useNavigate();
+
+  // Detectar cambios en la ruta
+  useEffect(() => {
+    setActiveItem(location.pathname);
+  }, [location]);
 
   // Detectar usuario autenticado
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Buscar la info del usuario en Firestore
         const docRef = doc(db, "usuarios", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
@@ -23,7 +43,6 @@ const Sidebar = () => {
         setUserData(null);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -31,74 +50,67 @@ const Sidebar = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      window.location.href = "/"; // Redirigir al login
+      window.location.href = "/"; // Redirige al login
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
   };
 
+  const menuItems = [
+    { id: "inicio", icon: faHome, label: "Inicio", href: "/" },
+    { id: "compras", icon: faShoppingCart, label: "Compras", href: "/compras" },
+    { id: "rrhh", icon: faFileAlt, label: "RRHH", href: "/rrhh" },
+    { id: "inventario", icon: faBox, label: "Inventario", href: "/inventario" },
+    { id: "ti", icon: faMicrochip, label: "TI", href: "/ti" },
+    { id: "perfil", icon: faUser, label: "Perfil", href: "/perfil" },
+    { id: "configuracion", icon: faCog, label: "Configuración", href: "/configuracion" },
+  ];
+
   return (
     <div
-      className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
+      className={`sidebar ${isExpanded ? "expanded" : "collapsed"} ${isHovered ? "hovered" : ""}`}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        setIsExpanded(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsExpanded(false);
+      }}
     >
-      <div className="sidebar-header">
-        <span className="logo"></span>
-        {isExpanded && <h2 className="title">Dashboard</h2>}
-      </div>
+      {/* Menú de navegación */}
+      <nav className="sidebar-nav">
+        <ul className="sidebar-menu">
+          {menuItems.map((item) => (
+            <li key={item.id} className="menu-item">
+              <Link
+                to={item.href}
+                className={`menu-link ${activeItem === item.href ? "active" : ""}`}
+              >
+                <div className="menu-icon-wrapper">
+                  <FontAwesomeIcon icon={item.icon} size="lg" />
+                </div>
+                {isExpanded && <span className="menu-text">{item.label}</span>}
+                {!isExpanded && isHovered && (
+                  <div className="tooltip">{item.label}</div>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-      <ul className="sidebar-menu">
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <Home className="icon" size={24} />
-            {isExpanded && <span className="text">Inicio</span>}
-          </a>
-        </li>
-
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <User className="icon" size={24} />
-            {isExpanded && <span className="text">Perfil</span>}
-          </a>
-        </li>
-
-        <li className="menu-item">
-          <a href="#" className="menu-link">
-            <Settings className="icon" size={24} />
-            {isExpanded && <span className="text">Configuración</span>}
-          </a>
-        </li>
-
-        {/* 🔹 NUEVA OPCIÓN: Ir al formulario de registro */}
-        <li className="menu-item">
-          <a href="/register" className="menu-link">
-            <User className="icon" size={24} />
-            {isExpanded && <span className="text">Registrar usuario</span>}
-          </a>
-        </li>
-      </ul>
-
-      {userData && (
-        <div className="sidebar-user">
-          <div className="user-info">
-            <User size={32} className="user-avatar" />
-            {isExpanded && (
-              <div className="user-details">
-                <span className="user-name">
-                  {userData.nombre} {userData.apellido}
-                </span>
-                <span className="user-role">{userData.rol}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
+      {/* Footer con botón de cerrar sesión */}
       <div className="sidebar-footer">
-        <button onClick={handleLogout} className="menu-link logout-btn">
-          <LogOut className="icon" size={24} />
-          {isExpanded && <span className="text">Cerrar sesión</span>}
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+          title="Cerrar sesión"
+        >
+          <div className="logout-icon-wrapper">
+            <FontAwesomeIcon icon={faSignOutAlt} size="lg" />
+          </div>
+          {isExpanded && <span className="logout-text">Salir</span>}
         </button>
       </div>
     </div>

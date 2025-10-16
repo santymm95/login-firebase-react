@@ -1,181 +1,196 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth, db } from "../Credenciales";
-import {
-  createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-// 🧭 Componentes de navegación
-import NavLogin from "../components/NavLogin";
-import Sidebar from "../components/Sidebar";
-
-import "../assets/styles/register.css";
-
-const Register = () => {
-  const navigate = useNavigate();
-
+export default function Register() {
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
-    correo: "",
-    documento: "",
+    celular: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     rol: "",
-    clave: "",
   });
 
-  const [mensaje, setMensaje] = useState("");
+  const [usuarios, setUsuarios] = useState([]);
+  const [rolFilter, setRolFilter] = useState("");
 
-  const rolesDisponibles = [
-    { id: 3, nombre: "Admin" },
-    { id: 9, nombre: "Auxiliar de compras" },
-    { id: 8, nombre: "Directora Compras" },
-    { id: 4, nombre: "Director de proyecto" },
-    { id: 7, nombre: "Gerente administrativa" },
-    { id: 5, nombre: "Gerente de proyecto" },
-    { id: 6, nombre: "Gerente general" },
-    { id: 1, nombre: "Solicitante" },
+  const roles = [
+    "SuperAdmin",
+    "Admin",
+    "Compras",
+    "Colaborador",
+    "Administrativo",
+    "Director Proyecto",
+    "Gerencia de proyectos",
+    "Gerencia General",
+    "Gerente Ingeniería",
+    "Gerente Comercial",
   ];
 
+  // ✅ Traer usuarios desde backend
+  const fetchUsuarios = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/usuarios");
+      if (res.data.success) {
+        setUsuarios(res.data.usuarios);
+      } else {
+        setUsuarios([]);
+        console.warn("No se pudieron cargar los usuarios:", res.data.message);
+      }
+    } catch (error) {
+      console.error("Error cargando usuarios:", error);
+      setUsuarios([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsuarios();
+  }, []);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensaje("⏳ Verificando usuario...");
+    if (formData.password !== formData.confirmPassword) {
+      alert("⚠️ Las contraseñas no coinciden");
+      return;
+    }
 
     try {
-      // 🔍 Verificar si el correo ya existe
-      const existingMethods = await fetchSignInMethodsForEmail(auth, formData.correo);
-      if (existingMethods.length > 0) {
-        setMensaje("⚠️ Este correo ya está registrado. Inicia sesión en lugar de registrarte.");
-        return;
-      }
-
-      // 🧩 Crear usuario en Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.correo,
-        formData.clave
-      );
-      const user = userCredential.user;
-
-      // 💾 Guardar datos en Firestore
-      await setDoc(doc(db, "usuarios", user.uid), {
-        nombre: formData.nombre,
-        apellido: formData.apellido,
-        correo: formData.correo,
-        documento: formData.documento,
-        rol: formData.rol,
-        uid: user.uid,
-        creadoEn: new Date(),
-      });
-
-      setMensaje("✅ Usuario registrado correctamente. Redirigiendo...");
-
-      // 🔁 Redirigir a Dashboard
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1500);
-    } catch (error) {
-      console.error("Error al registrar usuario:", error);
-      if (error.code === "auth/email-already-in-use") {
-        setMensaje("⚠️ Este correo ya está registrado.");
+      const res = await axios.post("http://localhost:5000/register", formData);
+      if (res.data.success) {
+        alert("✅ Usuario creado correctamente");
+        setFormData({
+          nombre: "",
+          apellido: "",
+          celular: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          rol: "",
+        });
+        fetchUsuarios(); // recargar tabla
       } else {
-        setMensaje("❌ Error: " + error.message);
+        alert("❌ " + res.data.message);
       }
+    } catch (error) {
+      console.error(error);
+      alert("❌ Error en el servidor: " + error.message);
     }
   };
 
+  const filteredUsuarios = rolFilter
+    ? usuarios.filter((u) => u.rol === rolFilter)
+    : usuarios;
+
   return (
-    <div className="dashboard-layout">
-      {/* 🔹 Barra superior */}
-      <NavLogin />
+    <div style={{ maxWidth: "800px", margin: "50px auto" }}>
+      <h2 style={{ textAlign: "center" }}>Registrar Usuario</h2>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          marginBottom: "30px",
+          border: "1px solid #ccc",
+          padding: "20px",
+          borderRadius: "8px",
+        }}
+      >
+        <input
+          name="nombre"
+          placeholder="Nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="apellido"
+          placeholder="Apellido"
+          value={formData.apellido}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="celular"
+          placeholder="Celular"
+          value={formData.celular}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Correo"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Clave"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="confirmPassword"
+          type="password"
+          placeholder="Repetir clave"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+        <select name="rol" value={formData.rol} onChange={handleChange} required>
+          <option value="">Selecciona un rol</option>
+          {roles.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+        <button type="submit">Crear Usuario</button>
+      </form>
 
-      {/* 🔹 Contenedor principal con sidebar + contenido */}
-      <div className="main-content-wrapper">
-        <Sidebar />
+      <h3>Usuarios registrados</h3>
+      <label>Filtrar por rol: </label>
+      <select value={rolFilter} onChange={(e) => setRolFilter(e.target.value)}>
+        <option value="">Todos</option>
+        {roles.map((r) => (
+          <option key={r} value={r}>
+            {r}
+          </option>
+        ))}
+      </select>
 
-        <div className="main-content">
-          <div className="registro-container">
-            <h2>Registro de Usuario</h2>
-
-            <form onSubmit={handleSubmit} className="registro-form">
-              <input
-                type="text"
-                name="nombre"
-                placeholder="Nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="apellido"
-                placeholder="Apellido"
-                value={formData.apellido}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="email"
-                name="correo"
-                placeholder="Correo electrónico"
-                value={formData.correo}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="documento"
-                placeholder="Documento"
-                value={formData.documento}
-                onChange={handleChange}
-                required
-              />
-              <select
-                name="rol"
-                value={formData.rol}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Seleccionar rol</option>
-                {rolesDisponibles.map((r) => (
-                  <option key={r.id} value={r.nombre}>
-                    {r.nombre}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="password"
-                name="clave"
-                placeholder="Contraseña"
-                value={formData.clave}
-                onChange={handleChange}
-                required
-              />
-
-              <button type="submit">Registrar usuario</button>
-            </form>
-
-            {mensaje && <p className="mensaje">{mensaje}</p>}
-
-            <p className="volver-login">
-              ¿Ya tienes cuenta?{" "}
-              <a href="/" className="link">
-                Inicia sesión
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
+      <table
+        border="1"
+        cellPadding="8"
+        style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}
+      >
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Celular</th>
+            <th>Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredUsuarios.map((u) => (
+            <tr key={u.uid}>
+              <td>{u.nombre}</td>
+              <td>{u.apellido}</td>
+              <td>{u.email}</td>
+              <td>{u.celular}</td>
+              <td>{u.rol}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-};
-
-export default Register;
+}
